@@ -17,6 +17,7 @@ type Environment struct {
 func main() {
 	synchronizedMap := csv.NewSynchronizedMap()
 	env := &Environment{synchronizedMap: synchronizedMap}
+	cron.LoadMap(synchronizedMap)
 	cron.ReloadMapEvery30Minutes(synchronizedMap)
 
 	router := mux.NewRouter().StrictSlash(true)
