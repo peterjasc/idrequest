@@ -13,9 +13,9 @@ func NewSynchronizedMap() *SynchronizedMap {
 	}
 }
 
-func (sm *SynchronizedMap) Load(key string) (value [2]string, ok bool) {
+func (sm *SynchronizedMap) Load(key string) (result [2]string, ok bool) {
 	sm.RLock()
-	result, ok := sm.unsynchronizedMap[key]
+	result, ok = sm.unsynchronizedMap[key]
 	sm.RUnlock()
 	return result, ok
 }

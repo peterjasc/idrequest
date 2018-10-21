@@ -1,5 +1,7 @@
 ## Instructions
 
+Add the csv file named ids.csv to the same level as main.go
+
 Inside the terminal, run
 `./idrequest`
 
