@@ -6,30 +6,25 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"nativepub.net/idrequest/cron"
 	"nativepub.net/idrequest/csv"
 )
 
-type Env struct {
+type Environment struct {
 	synchronizedMap *csv.SynchronizedMap
 }
 
 func main() {
-	records, err := csv.GetRecordsFromCsvFile("ids.csv")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	synchronizedMap := csv.NewSynchronizedMap()
-	synchronizedMap.UpdateMap(records)
-	env := &Env{synchronizedMap: synchronizedMap}
+	env := &Environment{synchronizedMap: synchronizedMap}
+	cron.ReloadMapEvery30Minutes(synchronizedMap)
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/promotions/{key}", env.Promotions)
 	log.Fatal(http.ListenAndServe(":1321", router))
 }
 
-func (env *Env) Promotions(writer http.ResponseWriter, request *http.Request) {
+func (env *Environment) Promotions(writer http.ResponseWriter, request *http.Request) {
 	if request.Method != "GET" {
 		http.Error(writer, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
@@ -39,7 +34,7 @@ func (env *Env) Promotions(writer http.ResponseWriter, request *http.Request) {
 
 	record, ok := env.synchronizedMap.Load(routeVariables["key"])
 	if ok != true {
-		http.Error(writer, http.StatusText(500), http.StatusInternalServerError)
+		http.Error(writer, "Key not found", http.StatusInternalServerError)
 		return
 	}
 

@@ -35,7 +35,6 @@ func GetRecordsFromCsvFile(filepath string) (records map[string][2]string, err e
 
 	records = make(map[string][2]string)
 	var record []string
-
 	for record, err = fileReader.reader.Read(); err == nil; record, err = fileReader.reader.Read() {
 		records[record[0]] = [2]string{record[1], record[2]}
 	}
