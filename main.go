@@ -22,7 +22,7 @@ func main() {
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/promotions/{key}", env.Promotions)
-	log.Fatal(http.ListenAndServe(":1321", router))
+	log.Fatal(http.ListenAndServeTLS(":1321", "server.crt", "server.key", router))
 }
 
 func (env *Environment) Promotions(writer http.ResponseWriter, request *http.Request) {

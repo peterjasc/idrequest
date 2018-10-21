@@ -13,6 +13,7 @@ func LoadMap(synchronizedMap *csv.SynchronizedMap) {
 		log.Fatal(err)
 	}
 	synchronizedMap.UpdateMap(records)
+	log.Printf("loaded synchronized map")
 }
 
 func ReloadMapEvery30Minutes(synchronizedMap *csv.SynchronizedMap) {
